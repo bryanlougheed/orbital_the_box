@@ -13,7 +13,7 @@ function  [inso, dayhrs] = insolationwm2(lat, sunlon, con, ecc, obl, lpe)
 %		Northern summer solstice = 90
 %		Northern autumn equinox = 180
 %		Northern winter solstice = 270
-% con = Solar constant. Single numerical value, w/m2. Leave empty, i.e. [], for 1367.
+% con = Solar constant. Single numerical value or 1D array, w/m2. Leave empty, i.e. [], for 1367.
 % ecc = Eccentricity. Numerical value(s). 1D array.
 % obl = Obliquity. Numerical value(s), radians. 1D array.
 % lpe = longitude of perihelion from moving equinox.
@@ -63,7 +63,7 @@ glpe = lpe + pi; % add 180
 glpe(glpe>2*pi) = glpe(glpe>2*pi) - 2*pi; % subtract 360 from stuff greater than 360
 
 % Insolation: Berger 1978 eq (10)
-inso  = con/pi*(1+ecc.*cos(sunlon-glpe)).^2 ./ ...
+inso  = con/pi.*(1+ecc.*cos(sunlon-glpe)).^2 ./ ...
         (1-ecc.^2).^2 .* ...
         ( hangle.*sin(lat).*sin(dsun) + cos(lat).*cos(dsun).*sin(hangle) );
 	

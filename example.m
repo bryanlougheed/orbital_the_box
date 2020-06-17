@@ -1,21 +1,19 @@
-time1 = -200; % ka
-time2 = 800; % ka
+time1 = 800; % ka 1950
+time2 = -200; % ka 1950
 
 % load orbital parameters
 [tka ecc obl lpe pre] = getlaskar2004(5,'slice',[time1 time2]);
 %[tka ecc] = getlaskar2010(1,'slice',[time1 time2]); % Laskar2010 eccentricity solution only makes a difference for >20 Ma
 
 
-% Calculate 60N summer
+% Calculate 65N summer
 [inso1] = insolationwm2(65, 90, 1367, ecc, obl, lpe);
-% Calculate 60N spring
+% Calculate 65N spring
 [inso2] = insolationwm2(0, 90, 1367, ecc, obl, lpe);
-% Calculate 60N winter
-[inso3] = insolationwm2(60, 270, 1367, ecc, obl, lpe);
-% Calculate 60S summer
-[inso4] = insolationwm2(-60, 270, 1367, ecc, obl, lpe);
-
-tka = tka;%/1000;
+% Calculate 65N winter
+[inso3] = insolationwm2(65, 270, 1367, ecc, obl, lpe);
+% Calculate 65S summer
+[inso4] = insolationwm2(-65, 270, 1367, ecc, obl, lpe);
 
 % plot
 figure(54)
@@ -49,47 +47,12 @@ plot(tka,inso1)
 %plot(tka,inso2)
 %plot(tka,inso3)
 set(gca,'xdir','reverse')
-ylabel(['Daily (24 hour) summer insolation',newline,'at 65N (W m^-^2)'])
+ylabel(['Mean daily summer solstice',newline,'insolation at 65N (W m^-^2)'])
 xlabel('Age (ka, thousands of years)')
 set(gca,'xgrid','on')
 set(gca,'ygrid','on')
 
-% figure(55)
-% clf
-% plot(tka,lpe,'k-')
 
-
-
-
-% set figure size (cm)
-xSize = 20;
-ySize = 16;
-% set paper size (cm)
-set(gcf,'PaperUnits','centimeters')
-Y = ySize+0;
-X = xSize+0;
-set(gcf, 'PaperSize',[X Y])
-
-% put figure in centre of paper
-xLeft = (X-xSize)/2;
-yBottom = (Y-ySize)/2;
-set(gcf,'PaperPosition',[xLeft yBottom xSize ySize])
-% make background white
-set(gcf,'InvertHardcopy','on');
-set(gcf,'color',[1 1 1]);
-
-print(gcf, '-dpdf', '-painters', ['inso.pdf']);
-
-
-
-%%
-subplot(2,1,2)
-plot(tka,ecc)
-hold on
-plot([tka(1) tka(end)],[0 0],'k-')
-set(gca,'xdir','reverse')
-grid on
-ylabel('Precession')
 
 
 %% make a heatmap of earth insolation for a particular year
@@ -101,8 +64,7 @@ sunlon = [0:1:359];
 
 
 % load orbital parameters
-[tka ecc obl lpe pre] = getlaskar2004(5,'slice',[0 0]); %#ok<*ASGLU>
-[tka ecc] = getlaskar2010(1,'slice',[0 0]); % Laskar2010 eccentricity solution only makes a difference for >20 Ma
+[tka ecc obl lpe pre] = getlaskar2004(5,'slice',[-0.05 -0.05]); %#ok<*ASGLU> 2000 AD (-0.05 ka 1950) is closest Laskar year
 insomesh1 = NaN(numel(lats),numel(sunlon));
 lod = NaN(size(insomesh1));
 for i = 1:numel(lats)
@@ -110,9 +72,9 @@ for i = 1:numel(lats)
 		[insomesh1(i,j) lod(i,j)] = insolationwm2(lats(i), sunlon(j), 1367, ecc, obl, lpe);
 	end
 end
+
 % load orbital parameters
-[tka ecc obl lpe pre] = getlaskar2004(5,'slice',[22000 22000]);
-[tka ecc] = getlaskar2010(1,'slice',[22000 22000]); % Laskar2010 eccentricity solution only makes a difference for >20 Ma
+[tka ecc obl lpe pre] = getlaskar2004(5,'slice',[21.950 21.950]);
 insomesh2 = NaN(numel(lats),numel(sunlon));
 for i = 1:numel(lats)
 	for j = 1:numel(sunlon)
@@ -120,7 +82,7 @@ for i = 1:numel(lats)
 	end
 end
 
-insomesh = insomesh1;% - insomesh1;
+insomesh = insomesh1-insomesh2;
 
 clf
 plh = imagesc(sunlon,lats,insomesh);
@@ -131,15 +93,14 @@ grid on
 plot([0 359],[0 0],'k:')
 set(gca,'ydir','normal')
 xticks([0 90 180 270 359]);
-xticklabels({'Mar 20','Jun 20','Sep 22','Dec 21','Mar 19'})
+xticklabels({'NH Spring','NH Summer','NH Autumn','NH Winter','NH Spring'})
 cb = colorbar;
 set(cb,'position',[0.93 0.11 0.02 .5])
-title('Average daily (24 hour period) insolation at top of atmosphere by latitude and time of year')
-title(cb,['Insolation',newline,'(W/m^2)'])
+title('Modern minus LGM W/m2')
 %title('Hours of daylight by latitude and time of year')
 %title(cb,'Hours')
 
-xlabel('Date')
+xlabel('Time of year')
 ylabel('Latitude (degrees)')
 
 %diverging colormap
