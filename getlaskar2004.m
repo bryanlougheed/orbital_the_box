@@ -20,7 +20,7 @@ function  [tka ecc obl lpe pre] = getlaskar2004(option, varargin)
 % ecc = eccentricity
 % obl = obliquity (radians)
 % lpe = longitude of perihelion from moving equinox (radians)
-% pre = precession index, calculated as ecc*sin(per)
+% pre = precession index, calculated as ecc*sin(lpe)
 %
 % Optional
 % ========
@@ -67,7 +67,7 @@ elseif option == 4
 elseif option == 5
 	d1 = load('INSOLN.LA2004.BTL.ASC');
 	d2 = load('INSOLP.LA2004.BTL.ASC');
-	d = [d1(2:end,:); d2]; % both have a 0 ka step. identical 0 ka data in both.
+	d = [d1(2:end,:); d2]; % both have a 0 yr step. identical 0 yr data in both.
 end
 
 d(:,1) = (d(:,1)*-1)-(50/1000); % ka 1950
