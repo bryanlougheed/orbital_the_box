@@ -63,7 +63,7 @@ elseif option == 4
 end
 
 d(:,1) = (d(:,1)*-1)-(50/1000); % ka 1950
-d = sortrows(d,1);
+d = sortrows(d,1,'descend');
 
 if min(slice) == max(slice)
 	d = d(d(:,1) == slice(1),:);

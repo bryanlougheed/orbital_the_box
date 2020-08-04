@@ -3,7 +3,7 @@ function sunlon = sday2sunlon(sday,ecc,lpe,totdays)
 %
 % Given a particular eccentricity and precession, get geocentric solar longitude 
 % associated with a particular solar day of tropical year i.e. by accounting for 
-% conservation of angular momentum during orbit (Keplar 2nd Law).
+% conservation of angular momentum during orbit (Kepler 2nd Law).
 %
 % Input
 % =====
@@ -15,7 +15,7 @@ function sunlon = sday2sunlon(sday,ecc,lpe,totdays)
 %
 % Output
 % ======
-% sunlon  = Keplarian geocentric solar longitude in degrees (i.e., "v" relative to NH spring) 
+% sunlon  = Keplerian geocentric solar longitude in degrees (i.e., "v" relative to NH spring) 
 %		    0 = NH Spring, 90 = NH Summer, 180 = NH Autumn, 270 = NH Winter
 %		    Either 1 value (used as constant if other inputs are array), or an array of values.
 %
@@ -40,14 +40,14 @@ omega(omega>=2*pi) = omega(omega>=2*pi) - 2*pi; % wrap to 360
 % First, variables of NH spring equinox relative to perihelion
 veq = 2*pi - omega; % NH spring v relative to perihelion
 Eeq = 2 * atan( tan(veq/2) .* sqrt((1-ecc)./(1+ecc)) ); % Meeus (1998) page 195, solve for E
-Meq = Eeq-ecc.*sin(Eeq); % Meeus page 195, solve for M (Keplar equation). M is the circular orbit equivalent of v
+Meq = Eeq-ecc.*sin(Eeq); % Meeus page 195, solve for M (Kepler equation). M is the circular orbit equivalent of v
 Meq(Meq<0) = pi + (pi-Meq(Meq<0)*-1); % inbound to perihelion
 deq = Meq/(2*pi) .* totdays;
 
 % Second, get v of target (x) v relative to perihelion
 dx = deq + sday;
 Mx = (dx./totdays) * 2*pi;
-Ex = sinnotbasic(Mx,ecc); % solve Keplar equation for E, page 195 (see embedded funtion below);
+Ex = sinnotbasic(Mx,ecc); % solve Kepler equation for E, page 195 (see embedded function below);
 vx = 2 * atan( tan(Ex/2) .* sqrt((1+ecc)./(1-ecc)) ); % Meeus (1998) page 195, solve for v
 vx(vx<0) = pi + (pi-vx(vx<0)*-1); % inbound to perihelion
 
