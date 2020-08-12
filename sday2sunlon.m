@@ -24,7 +24,7 @@ function sunlon = sday2sunlon(sday,ecc,lpe,totdays)
 %
 % See following for background, as well as comments in the script:
 % Berger (1978). https://doi.org/10.1175/1520-0469(1978)035%3C2362:LTVODI%3E2.0.CO;2
-% R.W. Sinnot (1985), Sky and Telescope, vol. 70, page 159.
+% R.W. Sinnot (1985), "A computer assault on Kepler's equation." Sky and Telescope, vol. 70, page 159.
 % Meeus, J., (1998). Astronomical Algorithms, 2nd ed. Willmann-Bell, Inc., Richmond, Virginia. (specifically Chapter 30).
 % Berger et al. (2010): doi: 10.1016/j.quascirev.2010.05.007
 % Kostadinov and Gilb, (2014): doi: 10.5194/gmd-7-1051-2014
@@ -37,7 +37,7 @@ end
 omega = lpe+pi; % add 180
 omega(omega>=2*pi) = omega(omega>=2*pi) - 2*pi; % wrap to 360
 
-% First, variables of NH spring equinox relative to perihelion
+% First, get variables of NH spring equinox relative to perihelion
 veq = 2*pi - omega; % NH spring v relative to perihelion
 Eeq = 2 * atan( tan(veq/2) .* sqrt((1-ecc)./(1+ecc)) ); % Meeus (1998) page 195, solve for E
 Meq = Eeq-ecc.*sin(Eeq); % Meeus page 195, solve for M (Kepler equation). M is the circular orbit equivalent of v
@@ -65,12 +65,11 @@ sunlon(sday==totdays) = 0;
 function E = sinnotbasic(M,ecc)
 % Roger Sinnot (1985) BASIC script on page 206 of Jean Meeus' Astronomimcal
 % Algorithms (1998). Solves Kepler equation (Eq. 30.5 on Page 195 of Meeus) for E.
-%
 % Ported to Matlab by Tiho Kostadinov (Kostadinov and Gilb, 2014). 
 % Upgraded to process arrays using logical indexing by Bryan Lougheed in June 2020. 
 %
-% R.W. Sinnot (1985), Sky and Telescope, vol. 70, page 159.
-% Meeus, J., (1998). Astronomical Algorithms, 2nd ed. Willmann-Bell, Inc., Richmond, Virginia.
+% R.W. Sinnot (1985), "A computer assault on Kepler's equation", Sky and Telescope, vol. 70, page 159.
+% Meeus, J., (1998). Chapter 30 in Astronomical Algorithms, 2nd ed. Willmann-Bell, Inc., Richmond, Virginia.
 % Kostadinov and Gilb, (2014): doi:10.5194/gmd-7-1051-2014
 F = sign(M);
 M = abs(M)./(2*pi);
