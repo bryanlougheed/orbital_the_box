@@ -1,7 +1,7 @@
 function sday = sunlon2sday(sunlon,ecc,lpe,totdays)
 % sday = sunlon2sday(sunlon,ecc,lpe,totdays)
 %
-% Given a particular eccentricity and precession, get solar day of tropical year 
+% Given a particular eccentricity and longitude of perihelion, get solar day of tropical year 
 % associated with a particular geocentric solar longitude, i.e. by accounting for 
 % conservation of angular momentum during orbit (Kepler 2nd Law).
 %
@@ -9,7 +9,7 @@ function sday = sunlon2sday(sunlon,ecc,lpe,totdays)
 % =====
 % sunlon  = Keplerian geocentric solar longitude in degrees (i.e., "v" relative to NH spring) 
 %		    0 = NH Spring, 90 = NH Summer, 180 = NH Autumn, 270 = NH Winter
-%		    Either 1 value (used as constant if other inputs are array), or an array of values.
+%		    Either 1 value (used as constant if other inputs are array), or a 1D array of values.
 % ecc     = eccentricity, array
 % lpe     = longitude of perihelion (a.k.a omega-bar), array (radians)
 % totdays = total solar days in the year, single value. Use empty, [], for 365.24.
@@ -17,7 +17,7 @@ function sday = sunlon2sday(sunlon,ecc,lpe,totdays)
 % Output
 % ======
 % sday    = Solar day of tropical year (where Day 0 is northern spring equinox).
-%		    array, same size as ecc and lpe
+%		    Same dims as sunlon.
 %
 % B.C. Lougheed, June 2020
 % Matlab 2019a
@@ -46,7 +46,7 @@ deq = Meq/(2*pi) .* totdays;
 vx = veq + deg2rad(sunlon);
 vx(vx>2*pi) = vx(vx>2*pi) - 2*pi;
 Ex = 2 * atan( tan(vx/2) .* sqrt((1-ecc)./(1+ecc)) ); % Meeus (1998) page 195, solve for E
-Mx = Ex-ecc.*sin(Ex);% Meeus page 195, solve for M (Kepler equation). M is the circular orbit equivalent of v
+Mx = Ex-ecc.*sin(Ex); % Meeus page 195, solve for M (Kepler equation). M is the circular orbit equivalent of v
 Mx(Mx<0) = pi + (pi-Mx(Mx<0)*-1); % inbound to perihelion
 dx = Mx/(2*pi) .* totdays;
 

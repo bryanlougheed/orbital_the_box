@@ -1,5 +1,5 @@
-function  [tka ecc obl lpe pre] = getlaskar2004(option, varargin)
-% [tka ecc obl lpe pre]  = getlaskar2004(option)
+function  [tka ecc obl lpe] = getlaskar2004(option, varargin)
+% [tka ecc obl lpe]  = getlaskar2004(option)
 %
 % Open Laskar2010 solution data files.
 % Downloaded from http://vo.imcce.fr/insola/earth/online/earth/La2010/index.html
@@ -16,11 +16,10 @@ function  [tka ecc obl lpe pre] = getlaskar2004(option, varargin)
 % Output
 % ======
 %
-% tka = time in ka BP 1950 (negative years = future)
-% ecc = eccentricity
+% tka = time in ka BP 1950 (negative years = future from 1950)
+% ecc = eccentricity (dimensionless: https://en.wikipedia.org/wiki/Orbital_eccentricity)
 % obl = obliquity (radians)
 % lpe = longitude of perihelion from moving equinox (radians)
-% pre = precession index, calculated as ecc*sin(lpe)
 %
 % Optional
 % ========
@@ -83,7 +82,6 @@ tka = d(:,1);
 ecc = d(:,2);
 obl = d(:,3);
 lpe = d(:,4);
-pre = ecc.*sin(lpe);
 
 
 

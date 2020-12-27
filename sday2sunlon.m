@@ -1,14 +1,14 @@
 function sunlon = sday2sunlon(sday,ecc,lpe,totdays)
 % sunlon = sday2sunlon(sday,ecc,lpe,totdays)
 %
-% Given a particular eccentricity and precession, get geocentric solar longitude 
+% Given a particular eccentricity and longitude of perihelion, get geocentric solar longitude 
 % associated with a particular solar day of tropical year i.e. by accounting for 
 % conservation of angular momentum during orbit (Kepler 2nd Law).
 %
 % Input
 % =====
 % sday    = Solar day of tropical year (where Day 0 is northern spring equinox).
-%		    array, same size as ecc and lpe
+%			One value or 1D array.
 % ecc     = eccentricity, array
 % lpe     = longitude of perihelion (a.k.a omega-bar), array (radians)
 % totdays = total solar days in the year, single value. Use empty, [], for 365.24.
@@ -17,7 +17,7 @@ function sunlon = sday2sunlon(sday,ecc,lpe,totdays)
 % ======
 % sunlon  = Keplerian geocentric solar longitude in degrees (i.e., "v" relative to NH spring) 
 %		    0 = NH Spring, 90 = NH Summer, 180 = NH Autumn, 270 = NH Winter
-%		    Either 1 value (used as constant if other inputs are array), or an array of values.
+%		    Same dims as sday.
 %
 % B.C. Lougheed, June 2020
 % Matlab 2019a
@@ -65,8 +65,8 @@ sunlon(sday==totdays) = 0;
 function E = sinnotbasic(M,ecc)
 % Roger Sinnot (1985) BASIC script on page 206 of Jean Meeus' Astronomimcal
 % Algorithms (1998). Solves Kepler equation (Eq. 30.5 on Page 195 of Meeus) for E.
-% Ported to Matlab by Tiho Kostadinov (Kostadinov and Gilb, 2014). 
-% Upgraded to process arrays using logical indexing by Bryan Lougheed in June 2020. 
+% First port to Matlab by Tiho Kostadinov (Kostadinov and Gilb, 2014). 
+% Vectorised using logical indexing to process arrays by Bryan Lougheed in June 2020. 
 %
 % R.W. Sinnot (1985), "A computer assault on Kepler's equation", Sky and Telescope, vol. 70, page 159.
 % Meeus, J., (1998). Chapter 30 in Astronomical Algorithms, 2nd ed. Willmann-Bell, Inc., Richmond, Virginia.
@@ -80,7 +80,7 @@ F(M>pi) = -1;
 M(M>pi) = (2*pi)-M(M>pi);
 Eo = (pi/2)*ones(size(ecc));
 D = (pi/4)*ones(size(ecc));
-for j = 1:176 % 53 iterations for 16-bit precision (3.32*16 according to Meeus). So for 64-bit precision 3.32*64=176.
+for j = 1:54 % Sinnot says number of iterations is 3.30 * significant figures of system. Matlab double has 16 digit precision, so 16*3.30=53. Let's use 54
 	M1 = Eo-ecc.*sin(Eo);
 	Eo = Eo + D.*sign(M-M1);
 	D = D./2;
