@@ -8,16 +8,17 @@ function sunlon = sday2sunlon(sday,ecc,lpe,totdays)
 % Input
 % =====
 % sday    = Solar day of tropical year (where Day 0 is northern spring equinox).
-%			One value or 1D array.
+%	    One value or 1D array.
 % ecc     = eccentricity, array
-% lpe     = longitude of perihelion (a.k.a omega-bar), array (radians)
+% lpe     = heliocentric longitude of perihelion (a.k.a. omega-bar), array (radians)
 % totdays = total solar days in the year, single value. Use empty, [], for 365.24.
 %
 % Output
 % ======
-% sunlon  = Keplerian geocentric solar longitude in degrees (i.e., "v" relative to NH spring) 
-%		    0 = NH Spring, 90 = NH Summer, 180 = NH Autumn, 270 = NH Winter
-%		    Same dims as sday.
+% sunlon  = Keplerian geocentric solar longitude in degrees (lambda, i.e. 'v' relative to NH spring equinox) 
+%           0 = NH Spring, 90 = NH Summer, 180 = NH Autumn, 270 = NH Winter
+%           Either 1 value (used as constant if other inputs are array), or a 1D array of values.
+%           Same dims as sday.
 %
 % B.C. Lougheed, June 2020
 % Matlab 2019a
@@ -42,7 +43,7 @@ veq = 2*pi - omega; % NH spring v relative to perihelion
 Eeq = 2 * atan( tan(veq/2) .* sqrt((1-ecc)./(1+ecc)) ); % Meeus (1998) page 195, solve for E
 Meq = Eeq-ecc.*sin(Eeq); % Meeus page 195, solve for M (Kepler equation). M is the circular orbit equivalent of v
 Meq(Meq<0) = pi + (pi-Meq(Meq<0)*-1); % inbound to perihelion
-deq = Meq/(2*pi) .* totdays;
+deq = Meq/(2*pi) .* totdays; % day of spring equinox relative to perihelion
 
 % Second, get v of target (x) v relative to perihelion
 dx = deq + sday;
@@ -63,8 +64,8 @@ sunlon(sday==totdays) = 0;
 
 
 function E = sinnotbasic(M,ecc)
-% Roger Sinnot (1985) BASIC script on page 206 of Jean Meeus' Astronomimcal
-% Algorithms (1998). Solves Kepler equation (Eq. 30.5 on Page 195 of Meeus) for E.
+% Roger Sinnot (1985) BASIC script.
+% Solves Kepler equation (e.g. Eq. 30.5 on Page 195 of Meeus, 1998) for E.
 % First port to Matlab by Tiho Kostadinov (Kostadinov and Gilb, 2014). 
 % Vectorised using logical indexing to process arrays by Bryan Lougheed in June 2020. 
 %

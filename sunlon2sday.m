@@ -7,17 +7,17 @@ function sday = sunlon2sday(sunlon,ecc,lpe,totdays)
 %
 % Input
 % =====
-% sunlon  = Keplerian geocentric solar longitude in degrees (i.e., "v" relative to NH spring) 
-%		    0 = NH Spring, 90 = NH Summer, 180 = NH Autumn, 270 = NH Winter
-%		    Either 1 value (used as constant if other inputs are array), or a 1D array of values.
+% sunlon  = Keplerian geocentric solar longitude in degrees (lambda, i.e. 'v' relative to NH spring equinox) 
+%           0 = NH Spring, 90 = NH Summer, 180 = NH Autumn, 270 = NH Winter
+%           Either 1 value (used as constant if other inputs are array), or a 1D array of values.
 % ecc     = eccentricity, array
-% lpe     = longitude of perihelion (a.k.a omega-bar), array (radians)
+% lpe     = heliocentric longitude of perihelion (a.k.a omega-bar), array (radians)
 % totdays = total solar days in the year, single value. Use empty, [], for 365.24.
 %
 % Output
 % ======
 % sday    = Solar day of tropical year (where Day 0 is northern spring equinox).
-%		    Same dims as sunlon.
+%           Same dims as sunlon.
 %
 % B.C. Lougheed, June 2020
 % Matlab 2019a
