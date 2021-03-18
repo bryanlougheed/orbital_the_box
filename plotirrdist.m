@@ -1,5 +1,5 @@
 function plotirrdist(obl,ecc,lpe,con,earthshape,savename)
-% irryeardist(obl,ecc,lpe,con,earthshape,savename)
+% plotirrdist(obl,ecc,lpe,con,earthshape,savename)
 %
 % Makes a plot of distribution of Earth's irradiance throughout the year
 % and saves copy to hard drive.
