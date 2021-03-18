@@ -17,8 +17,8 @@ function plotirrdist(obl,ecc,lpe,con,earthshape,savename)
 %
 % Output
 % ------
-% A scale plot of the orbit in current plotting window, or new plotting
-% window if there is none open.
+% A plot of irradiance profile of the Earth in the current figure window,
+% or new figure window, if none is open.
 %
 % B.C. Lougheed, December 2020
 
