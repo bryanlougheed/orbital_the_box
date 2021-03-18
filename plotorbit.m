@@ -92,52 +92,52 @@ axis off
 set(findall(gcf,'-property','FontSize'),'FontSize',6)
 print2png(gcf, savename, 7.5, 7.5, 150)
 
+	% nested function
+	function print2png(fig, filename, X, Y, dpi, xmarg, ymarg)
+		% print2png(fig, filename, X, Y, dpi, xmarg, ymarg)
+		%
+		% Required:
+		% ---------
+		% fig = figure number of figure object, e.g. gcf
+		% filename = string
+		% X = PNG width (cm)
+		% Y = PNG height (cm)
+		% dpi = resolution in dots per inch
+		%
+		% Optional (will be zero if not given):
+		% -------------------------------------
+		% xmarg = sum of horizontal margins on both sides (cm)
+		% ymarg = sum of vertical margins on both sides (cm)
+		%
+		% -----------------------
+		% B.C. Lougheed, Oct 2020
+		
+		if nargin < 6
+			xmarg = 0;
+			ymarg = 0;
+		end
+		
+		% set figure size (cm)
+		xSize = X-xmarg;
+		ySize = Y-ymarg;
+		
+		% set paper size (cm)
+		set(gcf,'PaperUnits','centimeters')
+		set(gcf, 'PaperSize',[X Y])
+		
+		% put figure in centre of paper
+		xLeft = (X-xSize)/2;
+		yBottom = (Y-ySize)/2;
+		set(gcf,'PaperPosition',[xLeft yBottom xSize ySize])
+		
+		% make background white
+		set(gcf,'InvertHardcopy','on');
+		set(gcf,'color',[1 1 1]);
+		
+		% save to hard drive
+		print(figure(fig), '-dpng', ['-r',num2str(dpi)], [filename]);
+		
+	end
 
-end % end function
-
-% nested function
-function print2png(fig, filename, X, Y, dpi, xmarg, ymarg)
-% print2png(fig, filename, X, Y, dpi, xmarg, ymarg)
-%
-% Required:
-% ---------
-% fig = figure number of figure object, e.g. gcf
-% filename = string
-% X = PNG width (cm)
-% Y = PNG height (cm)
-% dpi = resolution in dots per inch
-%
-% Optional (will be zero if not given):
-% -------------------------------------
-% xmarg = sum of horizontal margins on both sides (cm)
-% ymarg = sum of vertical margins on both sides (cm)
-%
-% -----------------------
-% B.C. Lougheed, Oct 2020
-
-if nargin < 6
-	xmarg = 0;
-	ymarg = 0;
-end
-
-% set figure size (cm)
-xSize = X-xmarg;
-ySize = Y-ymarg;
-
-% set paper size (cm)
-set(gcf,'PaperUnits','centimeters')
-set(gcf, 'PaperSize',[X Y])
-
-% put figure in centre of paper
-xLeft = (X-xSize)/2;
-yBottom = (Y-ySize)/2;
-set(gcf,'PaperPosition',[xLeft yBottom xSize ySize])
-
-% make background white
-set(gcf,'InvertHardcopy','on');
-set(gcf,'color',[1 1 1]);
-
-% save to hard drive
-print(figure(fig), '-dpng', ['-r',num2str(dpi)], [filename]);
 
 end
