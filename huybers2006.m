@@ -1,10 +1,15 @@
-% recreate figure data from Huybers (2006) 10.1126/science.1125249
-
-% get laskar data
-[tka ecc obl lpe]  = getlaskar2004(1, 'slice',[-0.5 2000.5]);
+% recreate figure data from Huybers (2006) doi:10.1126/science.1125249
 
 % solar sonstant to use
 con = 1361;
+% latitude to look at
+lattarg = 65;
+% melting threshold W/m2
+thresh = 275; % what huybers uses
+
+
+% get laskar orbital parameters
+[tka ecc obl lpe]  = getlaskar2004(1, 'slice',[-0.5 2000.5]);
 
 % N65 summer solstice W/m2
 [n65sswm2, ~, ~, ~] = irrwm2(65, 90, con, ecc, obl, lpe);
@@ -16,10 +21,9 @@ sdays = 0:dayres:ndays-dayres; % day 0 and day ndays are same day
 n65Jm2thresh = NaN(size(tka));
 n65meanirrthresh = NaN(size(tka));
 secs = NaN(size(tka));
-thresh = 275; % threshold Wm2 that defines melting season
 for i = 1:numel(tka)
 	sunlons = sday2sunlon(sdays,ecc(i),lpe(i),ndays);
-	[irrs, ~, ~, ~] = irrwm2(65, sunlons, con, ecc(i), obl(i), lpe(i));
+	[irrs, ~, ~, ~] = irrwm2(lattarg, sunlons, con, ecc(i), obl(i), lpe(i));
 	n65meanirrthresh(i) = mean(irrs(irrs>=thresh));
 	secs(i) = numel(sdays(irrs>=thresh)) * (24*60*60*dayres);
 	n65Jm2thresh(i) = n65meanirrthresh(i) * secs(i); % W/m2 * s = J/m2
