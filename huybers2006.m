@@ -8,7 +8,7 @@ lattarg = 65;
 thresh = 275; % what huybers uses
 
 
-% get laskar orbital parameters
+% get laskar et al orbital parameters
 [tka ecc obl lpe]  = getlaskar2004(1, 'slice',[-0.5 2000.5]);
 
 % N65 summer solstice W/m2
@@ -34,22 +34,30 @@ seasdays = secs / (60*60*24); % season day length (days with Wm2 greater than th
 % plot some stuff
 
 xlims = [0 1000];
+npanels = 4;
 
-subplot(3,1,1)
+subplot(npanels,1,1)
+plot(tka,n65sswm2)
+set(gca,'xdir','reverse')
+xlim(xlims)
+ylabel('Wm^{-2}')
+xlabel('Age (ka)')
+
+subplot(npanels,1,2)
 plot(tka,n65meanirrthresh)
 set(gca,'xdir','reverse')
 xlim(xlims)
 ylabel('Wm^{-2}')
 xlabel('Age (ka)')
 
-subplot(3,1,2)
+subplot(npanels,1,3)
 plot(tka,seasdays)
 set(gca,'xdir','reverse')
 xlim(xlims)
 ylabel('Days')
 xlabel('Age (ka)')
 
-subplot(3,1,3)
+subplot(npanels,1,4)
 plot(tka,n65Jm2thresh/10^9)
 set(gca,'xdir','reverse')
 xlim(xlims)
