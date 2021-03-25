@@ -25,7 +25,7 @@ function sunlon = sday2sunlon(sday,ecc,lpe,totdays)
 %
 % See following for background, as well as comments in the script:
 % Berger (1978). https://doi.org/10.1175/1520-0469(1978)035%3C2362:LTVODI%3E2.0.CO;2
-% R.W. Sinnot (1985), "A computer assault on Kepler's equation." Sky and Telescope, vol. 70, page 159.
+% R.W. Sinnott (1985), "A computer assault on Kepler's equation." Sky and Telescope, vol. 70, page 159.
 % Meeus, J., (1998). Astronomical Algorithms, 2nd ed. Willmann-Bell, Inc., Richmond, Virginia. (specifically Chapter 30).
 % Berger et al. (2010): doi: 10.1016/j.quascirev.2010.05.007
 % Kostadinov and Gilb, (2014): doi: 10.5194/gmd-7-1051-2014
@@ -48,7 +48,7 @@ deq = Meq/(2*pi) .* totdays; % day of spring equinox relative to perihelion
 % Second, get v of target (x) v relative to perihelion
 dx = deq + sday;
 Mx = (dx./totdays) * 2*pi;
-Ex = sinnotbasic(Mx,ecc); % solve Kepler equation for E, page 195 (see embedded function below);
+Ex = sinnottbasic(Mx,ecc); % solve Kepler equation for E, Sinnott (1985)
 vx = 2 * atan( tan(Ex/2) .* sqrt((1+ecc)./(1-ecc)) ); % Meeus (1998) page 195, solve for v
 vx(vx<0) = pi + (pi-vx(vx<0)*-1); % inbound to perihelion
 
@@ -63,31 +63,7 @@ sunlon(sday==totdays) = 0;
 
 
 
-function E = sinnotbasic(M,ecc)
-% Roger Sinnot (1985) BASIC script.
-% Solves Kepler equation (e.g. Eq. 30.5 on Page 195 of Meeus, 1998) for E.
-% First port to Matlab by Tiho Kostadinov (Kostadinov and Gilb, 2014). 
-% Vectorised using logical indexing to process arrays by Bryan Lougheed in June 2020. 
-%
-% R.W. Sinnot (1985), "A computer assault on Kepler's equation", Sky and Telescope, vol. 70, page 159.
-% Meeus, J., (1998). Chapter 30 in Astronomical Algorithms, 2nd ed. Willmann-Bell, Inc., Richmond, Virginia.
-% Kostadinov and Gilb, (2014): doi:10.5194/gmd-7-1051-2014
-F = sign(M);
-M = abs(M)./(2*pi);
-M = (M-floor(M))*(2*pi).*F;
-M(M<0) = M(M<0)+(2*pi); % add 360 degrees
-F = ones(size(M));
-F(M>pi) = -1;
-M(M>pi) = (2*pi)-M(M>pi);
-Eo = (pi/2)*ones(size(ecc));
-D = (pi/4)*ones(size(ecc));
-for j = 1:54 % Sinnot says number of iterations is 3.30 * significant figures of system. Matlab double has 16 digit precision, so 16*3.30=53. Let's use 54
-	M1 = Eo-ecc.*sin(Eo);
-	Eo = Eo + D.*sign(M-M1);
-	D = D./2;
-end
-E = Eo.*F;
-end % end nested function
 
-end % end main function
+
+end 
 
