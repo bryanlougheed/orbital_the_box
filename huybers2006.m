@@ -12,7 +12,7 @@ thresh = 275; % what huybers uses
 [tka ecc obl lpe]  = getlaskar2004(1, 'slice',[-0.5 2000.5]);
 
 % N65 summer solstice W/m2
-[n65sswm2, ~, ~, ~] = irrwm2(65, 90, con, ecc, obl, lpe);
+[n65sswm2, ~, ~, ~] = irrwm2(lattarg, 90, con, ecc, obl, lpe);
 
 % total summer J/m2
 ndays = 365.2;
