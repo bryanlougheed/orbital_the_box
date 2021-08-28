@@ -1,8 +1,8 @@
 function  [tka ecc obl lpe] = getlaskar2004(option, varargin)
 % [tka ecc obl lpe]  = getlaskar2004(option)
 %
-% Open Laskar2010 solution data files.
-% Downloaded from http://vo.imcce.fr/insola/earth/online/earth/La2010/index.html
+% Open Laskar2004 solution data files.
+% Downloaded from http://vo.imcce.fr/insola/earth/online/earth/La2004/index.html
 %
 % Input
 % =====
