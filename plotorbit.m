@@ -1,5 +1,5 @@
 function plotorbit(ecc,lpe,savename)
-% plotorbit(ecc,lpe)
+% plotorbit(ecc,lpe,savename)
 %
 % Creates a scale plot of the Earth's orbit and saves to hard drive.
 %
@@ -52,7 +52,7 @@ hold on
 % plot the sun
 plot(0,0,'yo','markersize',15,'markerfacecolor',[255 221 66]/255,'markeredgecolor',[255 143 66]/255)
 
-% plot the seasons
+% plot the astronomical seasons
 ofs = 1.13; % text  offset
 % text rotation
 nserot = -90; if nse < 0; nserot =  90; end
@@ -90,10 +90,10 @@ ylim([-170 170])
 
 axis off
 set(findall(gcf,'-property','FontSize'),'FontSize',6)
-print2png(gcf, savename, 7.5, 7.5, 150)
+print2pngn(gcf, savename, 7.5, 7.5, 150)
 
 	% nested function
-	function print2png(fig, filename, X, Y, dpi, xmarg, ymarg)
+	function print2pngn(fig, filename, X, Y, dpi, xmarg, ymarg)
 		% print2png(fig, filename, X, Y, dpi, xmarg, ymarg)
 		%
 		% Required:
