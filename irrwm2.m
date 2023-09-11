@@ -7,13 +7,13 @@ function  [irr, dayhrs, tsi, rx] = irrwm2(lat, sunlon, con, ecc, obl, lpe, earth
 % Input
 % =====
 %
-% lat = Latitude (in degrees N, so minus for S) on Earth. 1D array.       _
+% lat = Geocentric latitude (in deg. N, minus for S) on Earth. 1D array   _
 % sunlon = Geocentric solar longitude (lambda). 1D array. (degrees, 0-359.9)
 %          Northern spring equinox = 0
 %          Northern summer solstice = 90
 %          Northern autumn equinox = 180
 %          Northern winter solstice = 270
-% con = Solar constant. Single numerical value or 1D array, W/m2. Leave empty, i.e. [], for 1367.
+% con = Solar constant. Single numerical value or 1D array, W/m2. Leave empty, i.e. [], for 1361.
 % ecc = Eccentricity. Numerical value(s). 1D array.
 % obl = Obliquity. Numerical value(s), radians. 1D array.
 % lpe = longitude of perihelion from moving equinox. (omega-bar)
@@ -31,7 +31,7 @@ function  [irr, dayhrs, tsi, rx] = irrwm2(lat, sunlon, con, ecc, obl, lpe, earth
 % dayhrs = Hours of daylight.
 %          Array same size as ecc, obl and lpe.
 %
-% tsi  =   Calculated mean daily irrlation at top of atmosphere assuming 90 degree angle of incidence. W/m2
+% tsi  =   Calculated mean daily irradiance at top of atmosphere assuming 90 degree angle of incidence. W/m2
 %          Insensitive to latitude, obliquity or earthshape.
 %          Array same size as ecc, obl and lpe. 
 %
@@ -50,17 +50,17 @@ function  [irr, dayhrs, tsi, rx] = irrwm2(lat, sunlon, con, ecc, obl, lpe, earth
 % taken from here: http://eisenman.ucsd.edu/code/daily_insolation.m
 %
 % I added ability to take oblateness of Earth into account,
-% validated using Van Hemelrijck (1983) solution. (see comments in script)
+% validated against Van Hemelrijck (1983) solution. (see comments in script)
 %
 % I added daylight hours output following sunrise equation: 
 % https://en.wikipedia.org/wiki/Sunrise_equation
 %
-% I added irr90 by calculating distance from sun following Meeus (1998).
+% I added tsi by calculating distance from sun following Meeus (1998).
 % Meeus, J., (1998). Astronomical Algorithms, 2nd ed. Willmann-Bell, Inc., Richmond, Virginia. (specifically Chapter 30).
 
 
 if isempty(con) == 1
-	con = 1367;
+	con = 1361;
 end
 
 if nargin < 7
@@ -127,3 +127,7 @@ rx = 1*(1-ecc.^2) ./ (1+ecc.*cos(vx)); % Eq. 30.3 in Meeus (1998)
 tsi = con * (1./rx).^2;
 
 end
+
+
+
+
