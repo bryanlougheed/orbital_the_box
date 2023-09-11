@@ -32,8 +32,8 @@ irrmat = NaN(numel(lats),numel(days));
 daymat = NaN(numel(lats),numel(days));
 
 % prep irradiance matrix
-sunlons = sday2sunlon(days,ecc,lpe,ndays);
-soleqdays = sunlon2sday([90 180 270],ecc,lpe,ndays);
+sunlons = time2sunlon(days,ecc,lpe,ndays);
+soleqdays = sunlon2time([90 180 270],ecc,lpe,ndays);
 for i = 1:numel(lats)
 	[irrmat(i,:), daymat(i,:), ~, rx] = irrwm2(lats(i), sunlons, con, ecc, obl, lpe, earthshape);
 end
@@ -129,13 +129,13 @@ ylim([0 1])
 axis off
 
 % uniform fonts
-set(findall(gcf,'-property','FontSize'),'FontSize',7)
+set(findall(gcf,'-property','FontSize'),'FontSize',10)
 
 % save to file
-print2png(gcf, savename, 19, 15, 150)
+print2pngn(gcf, savename, 30, 15, 150)
 
 	% nested function
-	function print2png(fig, filename, X, Y, dpi, xmarg, ymarg)
+	function print2pngn(fig, filename, X, Y, dpi, xmarg, ymarg)
 		% print2png(fig, filename, X, Y, dpi, xmarg, ymarg)
 		%
 		% Required:
@@ -170,7 +170,7 @@ print2png(gcf, savename, 19, 15, 150)
 		% put figure in centre of paper
 		xLeft = (X-xSize)/2;
 		yBottom = (Y-ySize)/2;
-		set(gcf,'PaperPosition',[xLeft yBottom xSize ySize])
+		set(gcf,'PaperPosition',[10 yBottom xSize ySize])
 		
 		% make background white
 		set(gcf,'InvertHardcopy','on');
