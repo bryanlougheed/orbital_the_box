@@ -9,36 +9,34 @@ function [time eot] = sunlon2time(sunlon,ecc,lpe,tottime,obl)
 % =====
 % sunlon  = Keplerian geocentric solar longitude in degrees ('lambda', i.e. 'v' relative to NH spring equinox) 
 %           0 = NH Spring, 90 = NH Summer, 180 = NH Autumn, 270 = NH Winter
-%           Either 1 value (used as constant if other inputs are array), or a 1D array of values.
+%           Either 1 value (used as constant if other inputs are vector), or a vector of values.
 % ecc     = eccentricity, array
 % lpe     = heliocentric longitude of perihelion (a.k.a omega-bar), array (in radians)
 % tottime = total time in the year, single value, any constant time unit you want. Use empty, [], for 365.24.
 % obl     = optional fifth input variable, for when calculating eot. Obliquity (in radians).
 %
-% Apologies that sunlon is in degrees and lpe in radians, it seemed like a
-% good idea at the time.
+% Apologies that sunlon is in degrees and lpe in radians, it seemed like a good idea at the time. 
+% Input can be vectorised in various ways, but double check output.
 %
 % Output
 % ======
-% time    = Solar day of tropical year (where Day 0 is northern spring equinox).
+% time    = Time interval of tropical year (where interval 0 is northern spring equinox).
 %           Same dims as sunlon.
 % eot     = equation of time (minutes). Requires fifth input variable obl.
-%			Same dims as sunlon. Returns empty if obl not supplied.
+%	    Same dims as sunlon. Returns empty if obl not supplied.
 %
 % B.C. Lougheed, June 2020, Matlab 2019a
 % Updated April 2023 to include eot.
 %
 % See following for background, as well as comments in the script:
-% Berger (1978). https://doi.org/10.1175/1520-0469(1978)035%3C2362:LTVODI%3E2.0.CO;2
 % Meeus, J., (1998). Astronomical Algorithms, 2nd ed. Willmann-Bell, Inc., Richmond, Virginia. (specifically Chapter 30).
-% Berger et al. (2010): doi: 10.1016/j.quascirev.2010.05.007
 % https://dr-phill-edwards.eu/Science/EOT.html (for equation of time)
 
 if isempty(tottime) == 1
 	tottime = 365.24;
 end
 
-% change lpe from heliocentric to geocentric: Fig 1 and Appendix B in e.g. Berger et al. (2010). Also Berger (1978)
+% change lpe from heliocentric to geocentric
 omega = lpe+pi; % add 180
 omega(omega>=2*pi) = omega(omega>=2*pi) - 2*pi; % wrap to 360
 
@@ -67,7 +65,7 @@ time(sunlon==0) = 0;
 time(sunlon==360) = 0;
 
 % calculate eot
-if nargin > 4
+if nargin > 4 || ~isempty(obl)
 	sunlon = deg2rad(sunlon);
 	% https://dr-phill-edwards.eu/Science/EOT.html (somebody who actually explains it clearly) 
 	% eccentricity component
